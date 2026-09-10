@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+/*
+ * Warden design system -- Master PRD section 6.
+ *
+ * Base is a deep, genuinely blue ink, not a tinted black. Allow and
+ * Step-up are distinguished by temperature and weight, not by a
+ * good/bad (green/red) color code -- step-up is not failure, it's the
+ * system working correctly. Red (--fault) is reserved exclusively for
+ * actual errors.
+ */
+@theme {
+  --color-ink-900: #101728;
+  --color-ink-800: #18213a;
+  --color-ink-700: #232f4f;
+  --color-mist-100: #e9edf7;
+  --color-mist-400: #94a2c4;
+
+  --color-clear: #2fd4a3;
+  --color-gate: #ffb020;
+  --color-fault: #ff5a52;
+  --color-edge: #6c5ce7;
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono-address: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-ink-900);
+  color: var(--color-mist-100);
+  font-family: var(--font-body);
+}
+
+/* Tabular figures for every amount, balance, and limit -- non-negotiable,
+   so digits don't jitter as values change. */
+.tabular-amount {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Truncated-middle monospace for addresses and hashes -- semantic, not
+   decorative (see PRD 6.4). */
+.address-mono {
+  font-family: var(--font-mono-address);
+}
+
+/* Visible keyboard focus on every interactive element, using --edge. */
+:focus-visible {
+  outline: 2px solid var(--color-edge);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
