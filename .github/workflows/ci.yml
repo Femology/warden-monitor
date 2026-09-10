@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Ensure warden-sdk is built
+        run: |
+          if [ ! -f node_modules/warden-sdk/dist/index.js ]; then
+            (cd node_modules/warden-sdk && npx tsc)
+          fi
+
+      - name: indexer tests
+        working-directory: indexer
+        run: npm test
+
+      - name: dashboard tests
+        working-directory: dashboard
+        run: npm test
+
+      - name: indexer build
+        working-directory: indexer
+        run: npm run build
+
+      - name: dashboard build
+        working-directory: dashboard
+        run: npm run build
