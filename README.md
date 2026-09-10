@@ -1,4 +1,20 @@
-# warden-monitor
+<div align="center">
+
+# Warden — Monitor
+
+**Read-only observability for warden-contract: an indexer + dashboard that watches, and
+can never decide.**
+
+[![CI](https://github.com/Femology/warden-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/Femology/warden-monitor/actions/workflows/ci.yml)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Network](https://img.shields.io/badge/network-Stellar%20Testnet-7D00FF)](https://stellar.expert/explorer/testnet/contract/CBFQ752LFNC57U4KWDAEKNU43PLBWJ7M2B4ZRYUMCWL62JHJNUYJVMB5)
+
+[Warden org](https://github.com/Femology) · [warden-contract](https://github.com/Femology/warden-contract) · [warden-sdk](https://github.com/Femology/warden-sdk) · [warden-app](https://github.com/Femology/warden-app) · [Discussions](https://github.com/Femology/warden-monitor/discussions)
+
+</div>
+
+---
+
 
 Read-only observability for [Warden](https://github.com/Femology/warden-contract): an
 indexer that polls `warden-contract`'s on-chain events, plus a dashboard showing how
@@ -83,3 +99,20 @@ cd dashboard && npm run dev
 | `PORT` | indexer | HTTP port, default `4000` |
 | `NEXT_PUBLIC_INDEXER_URL` | dashboard | Where the indexer's API is reachable from the dashboard |
 | `NEXT_PUBLIC_WARDEN_CONTRACT_ID`, `NEXT_PUBLIC_WARDEN_RPC_URL`, `NEXT_PUBLIC_WARDEN_NETWORK_PASSPHRASE` | dashboard | For the live `warden-sdk` reads on the drill-down page |
+
+---
+
+## Maintainers
+
+| Name | GitHub | Contact |
+|---|---|---|
+| Femology | [@Femology](https://github.com/Femology) | femimi1234@gmail.com |
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Found a security issue? See
+[SECURITY.md](SECURITY.md) instead of opening a public issue.
+
+<a href="https://github.com/Femology/warden-monitor/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Femology/warden-monitor" alt="Contributors" />
+</a>
