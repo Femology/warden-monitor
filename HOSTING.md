@@ -59,6 +59,7 @@ same names, same values, no drift.
 | `NEXT_PUBLIC_WARDEN_WALLET_WASM_HASH` | passkey-kit smart-wallet wasm hash |
 | `NEXT_PUBLIC_WARDEN_DEPLOYER_PUBLIC_KEY` | `WARDEN_ADMIN_ADDRESS` (the deployer's public key) |
 | `WARDEN_DEPLOYER_SECRET` | **Server-only.** The deployer's secret key. Never prefix this with `NEXT_PUBLIC_` -- doing so would ship it to every browser. |
+| `EVOMAP_API_KEY` | **Server-only, optional.** Phase 18's "Explain this" feature (`/api/explain`), read exclusively by that one route, never by client code. If unset, the route still works -- it always returns the pre-written fallback explanation instead of calling the model. Never prefix with `NEXT_PUBLIC_`. |
 
 ### `warden-monitor` dashboard (Vercel)
 
@@ -68,6 +69,7 @@ same names, same values, no drift.
 | `NEXT_PUBLIC_WARDEN_CONTRACT_ID` | `WARDEN_CONTRACT_ID` |
 | `NEXT_PUBLIC_WARDEN_RPC_URL` | `WARDEN_RPC_URL` |
 | `NEXT_PUBLIC_WARDEN_NETWORK_PASSPHRASE` | `WARDEN_NETWORK_PASSPHRASE` |
+| `EVOMAP_API_KEY` | **Server-only, optional.** Same Phase 18 feature and same fallback-on-absence behavior as `warden-app`'s copy above -- this dashboard has its own separate `/api/explain` route, so it needs its own copy of this variable; setting it on `warden-app` alone does not cover the dashboard. |
 
 ### `warden-monitor` indexer (Render, via `render.yaml`)
 
@@ -99,6 +101,9 @@ URL with no error indicating why. If `warden-app` or the dashboard ever seem to 
 the cause -- check the deployment's build time against when the env var actually
 changed, not just whether the service is "up."
 
-`WARDEN_DEPLOYER_SECRET` and the indexer's server-only env vars don't have this problem
--- Node process env vars are read at request time, so a Render restart alone does pick
-up a changed value there.
+`WARDEN_DEPLOYER_SECRET`, `EVOMAP_API_KEY`, and the indexer's server-only env vars don't
+have this problem -- Node process env vars are read at request time, so a Render
+restart (or, on Vercel, a plain redeploy without a code change) alone does pick up a
+changed value there. Still redeploy after setting a new server-only var on Vercel
+specifically, though -- Vercel's own dashboard only picks it up for the *next* build,
+not the currently-running one.
