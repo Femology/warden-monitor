@@ -22,8 +22,20 @@ jobs:
 
       - name: Ensure warden-sdk is built
         run: |
-          if [ ! -f node_modules/warden-sdk/dist/index.js ]; then
-            (cd node_modules/warden-sdk && npx tsc)
+          # npm's hoisting decision for this git dependency isn't stable --
+          # it lands at the workspace root some installs and nested under
+          # dashboard/node_modules others, with the same package.json/
+          # lockfile, on the same npm version. Resolve its actual location
+          # instead of assuming the root, or this step silently no-ops on a
+          # nested install (nothing there to build) while the root path it
+          # checked was never real to begin with.
+          WARDEN_SDK_DIR=$(find . -maxdepth 4 -type d -name warden-sdk -path '*/node_modules/warden-sdk' | grep -v '/node_modules/.*/node_modules/' | head -1)
+          if [ -z "$WARDEN_SDK_DIR" ]; then
+            echo "::error::warden-sdk not found in node_modules anywhere in the workspace after npm ci"
+            exit 1
+          fi
+          if [ ! -f "$WARDEN_SDK_DIR/dist/index.js" ]; then
+            (cd "$WARDEN_SDK_DIR" && npx tsc)
           fi
 
       - name: indexer tests

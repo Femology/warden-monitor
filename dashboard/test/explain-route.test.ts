@@ -12,7 +12,12 @@ function postRequest(body: unknown) {
 }
 
 function mockEvomapContent(content: string) {
-  return vi.fn(async () => ({
+  // Typed with fetch's own (url, init) parameters, even though unused here,
+  // so mock.calls[0] infers as [string, RequestInit] rather than [] --
+  // needed by the "sends only the structured input" test below, and only
+  // surfaces as a real type error under `next build`'s full project
+  // typecheck, not a plain `tsc --noEmit` on this file alone.
+  return vi.fn(async (_url: string, _init?: RequestInit) => ({
     ok: true,
     status: 200,
     json: async () => ({ choices: [{ message: { content } }] }),
