@@ -61,10 +61,18 @@ export function WalletDrilldown({ wallet }: WalletDrilldownProps) {
             <dd className="tabular-amount text-mist-100">{policy.maxNoStepUp}</dd>
             <dt className="text-mist-400">Daily limit</dt>
             <dd className="tabular-amount text-mist-100">{policy.dailyVelocityCap}</dd>
+            <dt className="text-mist-400">Hourly limit</dt>
+            <dd className="tabular-amount text-mist-100">{policy.hourlyVelocityCap}</dd>
             <dt className="text-mist-400">New recipients require step-up</dt>
             <dd className="text-mist-100">{policy.newRecipientRequiresStepUp ? 'Yes' : 'No'}</dd>
+            <dt className="text-mist-400">Trust expires after</dt>
+            <dd className="text-mist-100">{Math.round(Number(policy.trustDecaySeconds) / 86_400)} day(s)</dd>
             <dt className="text-mist-400">Trusted recipients</dt>
-            <dd className="text-mist-100">{policy.trustedRecipients.length}</dd>
+            {/* Record<address, last_paid_at>, not an array -- .length is not
+                a compile error here (a string index signature covers every
+                string key, "length" included) but it silently resolves to
+                undefined at runtime since the object has no such property. */}
+            <dd className="text-mist-100">{Object.keys(policy.trustedRecipients).length}</dd>
           </dl>
         )}
       </section>

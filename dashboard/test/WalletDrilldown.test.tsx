@@ -37,8 +37,10 @@ describe('WalletDrilldown', () => {
       owner: 'GWALLET',
       maxNoStepUp: '150',
       dailyVelocityCap: '500',
+      hourlyVelocityCap: '200',
       newRecipientRequiresStepUp: true,
-      trustedRecipients: ['GTRUSTED1'],
+      trustedRecipients: { GTRUSTED1: BigInt(1_700_000_000) },
+      trustDecaySeconds: BigInt(2_592_000),
       updatedAt: BigInt(0),
     });
     getVelocity.mockResolvedValue({ windowStart: BigInt(0), cumulativeAmount: '75', txCount: 3 });
@@ -50,6 +52,14 @@ describe('WalletDrilldown', () => {
 
     await waitFor(() => expect(screen.getByText('150')).toBeInTheDocument());
     expect(screen.getByText('500')).toBeInTheDocument();
+    expect(screen.getByText('200')).toBeInTheDocument();
+    // Regression test for a real bug found during the Phase 14 upgrade:
+    // trustedRecipients became a Record<address, last_paid_at>, and
+    // `.length` on it type-checks (a string index signature covers every
+    // key, "length" included) but silently renders `undefined` at runtime.
+    // This asserts the actual entry count, not the property name.
+    expect(screen.getByText('1')).toBeInTheDocument();
+    expect(screen.getByText('30 day(s)')).toBeInTheDocument();
     expect(screen.getByText('75 spent, 3 transfer(s)')).toBeInTheDocument();
   });
 
