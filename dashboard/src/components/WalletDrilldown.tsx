@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { Policy, VelocityWindow } from 'warden-sdk';
+import type { Policy, StepUpReason, VelocityWindow } from 'warden-sdk';
 import { wardenClient } from '@/lib/wardenClient';
 import { getWalletEvents, type WalletEvent } from '@/lib/api';
+import { ExplainButton } from './ExplainButton';
 
 interface WalletDrilldownProps {
   wallet: string;
@@ -95,24 +96,39 @@ export function WalletDrilldown({ wallet }: WalletDrilldownProps) {
             {events.map((event, index) => (
               <li
                 key={index}
-                className="flex items-center justify-between gap-3 rounded-md border border-ink-700 bg-ink-800 px-4 py-3 text-sm"
+                className="flex flex-col gap-2 rounded-md border border-ink-700 bg-ink-800 px-4 py-3 text-sm"
               >
-                <span className="address-mono text-mist-400">
-                  {event.recipient ? `${event.recipient.slice(0, 6)}…${event.recipient.slice(-6)}` : '—'}
-                </span>
-                <span className="tabular-amount text-mist-100">{event.amount}</span>
-                <span
-                  className="rounded-full px-2.5 py-0.5 text-xs font-medium"
-                  style={{
-                    color: event.decision === 'Allow' ? 'var(--color-clear)' : 'var(--color-gate)',
-                    backgroundColor:
-                      event.decision === 'Allow'
-                        ? 'color-mix(in oklab, var(--color-clear) 15%, transparent)'
-                        : 'color-mix(in oklab, var(--color-gate) 15%, transparent)',
-                  }}
-                >
-                  {event.decision === 'Allow' ? 'Allow' : event.reason}
-                </span>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="address-mono text-mist-400">
+                    {event.recipient ? `${event.recipient.slice(0, 6)}…${event.recipient.slice(-6)}` : '—'}
+                  </span>
+                  <span className="tabular-amount text-mist-100">{event.amount}</span>
+                  <span
+                    className="rounded-full px-2.5 py-0.5 text-xs font-medium"
+                    style={{
+                      color: event.decision === 'Allow' ? 'var(--color-clear)' : 'var(--color-gate)',
+                      backgroundColor:
+                        event.decision === 'Allow'
+                          ? 'color-mix(in oklab, var(--color-clear) 15%, transparent)'
+                          : 'color-mix(in oklab, var(--color-gate) 15%, transparent)',
+                    }}
+                  >
+                    {event.decision === 'Allow' ? 'Allow' : event.reason}
+                  </span>
+                </div>
+                {/* Phase 18: only step-up events have a reason code to
+                    explain -- an Allow decision has nothing to ground an
+                    explanation in beyond "everything was within policy",
+                    which the badge already says. */}
+                {event.decision === 'RequireStepUp' && event.reason && (
+                  <ExplainButton
+                    input={{
+                      eventType: 'stepup_required',
+                      reason: event.reason as StepUpReason,
+                      amount: event.amount ?? '0',
+                    }}
+                  />
+                )}
               </li>
             ))}
           </ul>
