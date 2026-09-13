@@ -5,18 +5,18 @@
 **Read-only observability for warden-contract: an indexer + dashboard that watches, and
 can never decide.**
 
-[![CI](https://github.com/Femology/warden-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/Femology/warden-monitor/actions/workflows/ci.yml)
+[![CI](https://github.com/wardenoss/warden-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/wardenoss/warden-monitor/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Network](https://img.shields.io/badge/network-Stellar%20Testnet-7D00FF)](https://stellar.expert/explorer/testnet/contract/CD5QU2E6LOKFAZFESIZSAA4IENH5SZHJVU4Y6532WNZSXPZDYRKEEVUW)
 
-[Warden org](https://github.com/Femology) · [warden-contract](https://github.com/Femology/warden-contract) · [warden-sdk](https://github.com/Femology/warden-sdk) · [warden-app](https://github.com/Femology/warden-app) · [Discussions](https://github.com/Femology/warden-monitor/discussions)
+[Warden org](https://github.com/wardenoss) · [warden-contract](https://github.com/wardenoss/warden-contract) · [warden-sdk](https://github.com/wardenoss/warden-sdk) · [warden-app](https://github.com/wardenoss/warden-app) · [Discussions](https://github.com/wardenoss/warden-monitor/discussions)
 
 </div>
 
 ---
 
 
-Read-only observability for [Warden](https://github.com/Femology/warden-contract): an
+Read-only observability for [Warden](https://github.com/wardenoss/warden-contract): an
 indexer that polls `warden-contract`'s on-chain events, plus a dashboard showing how
 often step-up triggers, on which reasons, and how a given wallet is running against its
 own policy and velocity cap.
@@ -103,6 +103,6 @@ cd dashboard && npm run dev
 See [CONTRIBUTING.md](CONTRIBUTING.md). Found a security issue? See
 [SECURITY.md](SECURITY.md) instead of opening a public issue.
 
-<a href="https://github.com/Femology/warden-monitor/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Femology/warden-monitor" alt="Contributors" />
+<a href="https://github.com/wardenoss/warden-monitor/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=wardenoss/warden-monitor" alt="Contributors" />
 </a>

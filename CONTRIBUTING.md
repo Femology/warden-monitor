@@ -19,7 +19,7 @@ Other rules:
 ## Local setup
 
 ```bash
-git clone https://github.com/Femology/warden-monitor.git
+git clone https://github.com/wardenoss/warden-monitor.git
 cd warden-monitor
 npm install
 

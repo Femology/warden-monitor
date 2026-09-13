@@ -3,7 +3,7 @@
 ## Unaudited -- use at your own risk
 
 **`warden-monitor` has not had a third-party security audit**, and neither has
-[`warden-contract`](https://github.com/Femology/warden-contract), the system it
+[`warden-contract`](https://github.com/wardenoss/warden-contract), the system it
 observes. This service is read-only by design (see the README's "one rule that governs
 everything"), which meaningfully limits its blast radius, but it has not been
 independently reviewed.
