@@ -249,7 +249,7 @@ export function WalletDrilldown({ wallet }: WalletDrilldownProps) {
               >
                 <div className="flex items-center justify-between gap-3">
                   <span className="address-mono text-mist-400">
-                    {event.recipient ? `${event.recipient.slice(0, 6)}…${event.recipient.slice(-6)}` : '—'}
+                    {event.recipient ? `${event.recipient.slice(0, 6)}…${event.recipient.slice(-6)}` : 'N/A'}
                   </span>
                   <span className="tabular-amount text-mist-100">{event.amount}</span>
                   <span
