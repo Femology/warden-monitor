@@ -23,20 +23,11 @@ own policy and velocity cap.
 
 ## The one rule that governs everything here
 
-**This service has no write path to `warden-contract`, anywhere, in any component.**
-Confirmed explicitly:
-
-- No endpoint or code path in `indexer/` ever calls a mutating contract function --
-  only `getEvents` (read) against Soroban RPC. Every HTTP route it exposes
-  (`/summary`, `/timeseries`, `/wallet/:address/events`) is a `GET` reading from its own
-  SQLite cache; anything else returns `405`.
-- The dashboard's wallet drill-down page reads **current policy and current velocity
-  live, every time, through `warden-sdk`** (`wardenClient.getPolicy` /
-  `wardenClient.getVelocity`) -- never from the indexer's cache. Only the *historical*
-  evaluation list on that page comes from the indexer.
-- The retention-window guard (`indexer/src/poller.ts`) checks the wanted resume ledger
-  against the RPC's own `oldestLedger` on every poll cycle and **logs a loud warning**
-  when a gap exists -- it never silently presents partial history as complete.
+**This service has no write path to `warden-contract`, anywhere.** The indexer only
+ever calls `getEvents` (read) against Soroban RPC; every HTTP route it exposes is a
+`GET` against its own SQLite cache. The dashboard's wallet drill-down page reads
+current policy and velocity live through `warden-sdk` on every load -- never from the
+indexer's cache; only the historical evaluation list comes from there.
 
 ## Architecture
 
@@ -67,13 +58,11 @@ No other endpoints exist.
 
 ## Known limitation: RPC event retention
 
-Soroban RPC only retains events for a limited recent ledger range -- this varies by
-provider and changes over time. If the indexer's `last_processed_ledger` has aged out of
-what the connected RPC endpoint still serves, a real, permanent gap exists in this
-index's history. The poller detects this on every cycle and logs it loudly
-(`RETENTION GAP` in the indexer's logs) rather than quietly resuming from wherever the
-RPC happens to start. This is a stated v1 limitation, not a bug -- a production
-deployment should alert on that log line.
+Soroban RPC only retains events for a limited recent ledger range, which varies by
+provider. If the indexer's last-processed ledger ages out of what the RPC still
+serves, a real gap exists in this index's history -- the poller detects this on every
+cycle and logs a `RETENTION GAP` warning rather than silently resuming with a hole in
+the record. A production deployment should alert on that log line.
 
 ## Local setup
 
@@ -99,6 +88,7 @@ cd dashboard && npm run dev
 | `PORT` | indexer | HTTP port, default `4000` |
 | `NEXT_PUBLIC_INDEXER_URL` | dashboard | Where the indexer's API is reachable from the dashboard |
 | `NEXT_PUBLIC_WARDEN_CONTRACT_ID`, `NEXT_PUBLIC_WARDEN_RPC_URL`, `NEXT_PUBLIC_WARDEN_NETWORK_PASSPHRASE` | dashboard | For the live `warden-sdk` reads on the drill-down page |
+| `EVOMAP_API_KEY` | dashboard | **Server-only, optional.** Powers "Explain this" on the drill-down page; falls back to pre-written explanations if unset. |
 
 ---
 
